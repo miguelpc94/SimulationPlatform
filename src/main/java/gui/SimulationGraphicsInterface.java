@@ -1,24 +1,31 @@
 package gui;
 
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-// TODO: Add methods to set and get a BufferedImage from the GUI as well as user input <======== 4 (head)
 public class SimulationGraphicsInterface {
 
     private int width;
     private int height;
 
-    private List<GraphicInstructions> instructionList;
+    private volatile BufferedImage bufferedImage;
+
+    private volatile Map<String,List<GraphicInstructions>> instructionList;
     private Map<String,Integer> userInput;
 
     public SimulationGraphicsInterface(int width, int height) {
         this.width = width;
         this.height = height;
-        instructionList = null;
+        instructionList = new HashMap<>();
         userInput = new HashMap<>();
     }
+
+    public void setBufferedImage(BufferedImage bufferedImage) { this.bufferedImage = bufferedImage; }
+
+    public BufferedImage getBufferedImage() { return bufferedImage; }
 
     public void setUserInput(Map<String,Integer> newUserInput) {
         userInput = newUserInput;
@@ -28,12 +35,17 @@ public class SimulationGraphicsInterface {
         return userInput;
     }
 
-    public void setInstructionList(List<GraphicInstructions> newInstructions) {
-        instructionList = newInstructions;
+    public void setInstructionList(String listName,List<GraphicInstructions> newInstructions) {
+        instructionList.put(listName,newInstructions);
     }
 
-    public List<GraphicInstructions> getInstructions() {
-        return instructionList;
+    public Set<String> getInstructionListNames() {
+        return this.instructionList.keySet();
+    }
+
+    public List<GraphicInstructions> getInstructions(String listName) {
+        if (!instructionList.containsKey(listName)) return null;
+        return instructionList.get(listName);
     }
 
     public int getWidth() {return width;}

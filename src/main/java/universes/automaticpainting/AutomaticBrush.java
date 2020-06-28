@@ -14,7 +14,7 @@ public class AutomaticBrush {
     private double r;
     private double g;
     private double b;
-    private double a;
+    private double a = 255;
 
     private double x = 600;
     private double xSpeed = 0;
@@ -22,7 +22,7 @@ public class AutomaticBrush {
     private double ySpeed = 0;
     private double maxSpeed = 0.05;
 
-    private int size = 5;
+    private int size = 4;
 
     private double atenuatorOffset;
     private double maxSpeedOffset;
@@ -68,7 +68,7 @@ public class AutomaticBrush {
         r = r < 0 ? 0 : r;
         g = g < 0 ? 0 : g;
         b = b < 0 ? 0 : b;
-        instructions.addCircle((int)x,(int)y,size,size,255,(int)r,(int)g,(int)b,true);
+        instructions.addCircle((int)x,(int)y,size,size,(int)a,(int)r,(int)g,(int)b,true);
 
         return instructions;
     }

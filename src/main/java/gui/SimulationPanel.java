@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public class SimulationPanel extends JPanel implements Runnable {
 
@@ -63,6 +64,7 @@ public class SimulationPanel extends JPanel implements Runnable {
         while (running) {
             update();
             input();
+            /*
             double now = System.nanoTime();
             while ((now-lastRenderTime) < TBR) {
                 long millisToSleep = (long)((TBR - (now-lastRenderTime))/1000000);
@@ -78,6 +80,7 @@ public class SimulationPanel extends JPanel implements Runnable {
             }
             double timeBetweenRenderings = System.nanoTime() - lastRenderTime;
             lastRenderTime = System.nanoTime();
+             */
             render();
             draw();
             //System.out.println("FPS:" + (1/(timeBetweenRenderings/1000000000)));
@@ -95,47 +98,51 @@ public class SimulationPanel extends JPanel implements Runnable {
 
     public void render() {
 
-        List<GraphicInstructions> instructionList = sgi.getInstructions();
+        Set<String> instructionListNames = sgi.getInstructionListNames();
 
-        if (instructionList != null && graphics2D != null) {
-            for(GraphicInstructions instructions : instructionList) {
-                for (Map<String, Object> instructionMap : instructions.getInstructionMaps()) {
-                    switch ((InstructionTypes) instructionMap.get("type")) {
-                        case CIRCLE:
-                            graphics2D.setColor(new Color((int) instructionMap.get("r"), (int) instructionMap.get("g"), (int) instructionMap.get("b"), (int) instructionMap.get("a")));
-                            if ((boolean) instructionMap.get("filled")) {
-                                graphics2D.fillOval((int) instructionMap.get("x"), (int) instructionMap.get("y"), (int) instructionMap.get("width"), (int) instructionMap.get("height"));
-                            } else {
-                                graphics2D.drawOval((int) instructionMap.get("x"), (int) instructionMap.get("y"), (int) instructionMap.get("width"), (int) instructionMap.get("height"));
-                            }
-                            break;
-                        case BOX:
-                            graphics2D.setColor(new Color((int) instructionMap.get("r"), (int) instructionMap.get("g"), (int) instructionMap.get("b"), (int) instructionMap.get("a")));
-                            if ((boolean) instructionMap.get("filled")) {
-                                graphics2D.fillRect((int) instructionMap.get("x"), (int) instructionMap.get("y"), (int) instructionMap.get("width"), (int) instructionMap.get("height"));
-                            } else {
-                                graphics2D.drawRect((int) instructionMap.get("x"), (int) instructionMap.get("y"), (int) instructionMap.get("width"), (int) instructionMap.get("height"));
-                            }
-                            break;
-                        case LINE:
-                            graphics2D.setColor(new Color((int) instructionMap.get("r"), (int) instructionMap.get("g"), (int) instructionMap.get("b"), (int) instructionMap.get("a")));
-                            graphics2D.drawLine((int) instructionMap.get("x1"), (int) instructionMap.get("y1"), (int) instructionMap.get("x2"), (int) instructionMap.get("y2"));
-                            break;
-                        case PIXEL:
-                            graphics2D.setColor(new Color((int) instructionMap.get("r"), (int) instructionMap.get("g"), (int) instructionMap.get("b"), (int) instructionMap.get("a")));
-                            graphics2D.drawRect((int) instructionMap.get("x"), (int) instructionMap.get("y"), 1, 1);
-                            break;
-                        default:
+        for (String listName : instructionListNames) {
+            List<GraphicInstructions> instructionList = sgi.getInstructions(listName);
+            if (instructionList != null && graphics2D != null) {
+                for (GraphicInstructions instructions : instructionList) {
+                    for (Map<String, Object> instructionMap : instructions.getInstructionMaps()) {
+                        switch ((InstructionTypes) instructionMap.get("type")) {
+                            case CIRCLE:
+                                graphics2D.setColor(new Color((int) instructionMap.get("r"), (int) instructionMap.get("g"), (int) instructionMap.get("b"), (int) instructionMap.get("a")));
+                                if ((boolean) instructionMap.get("filled")) {
+                                    graphics2D.fillOval((int) instructionMap.get("x"), (int) instructionMap.get("y"), (int) instructionMap.get("width"), (int) instructionMap.get("height"));
+                                } else {
+                                    graphics2D.drawOval((int) instructionMap.get("x"), (int) instructionMap.get("y"), (int) instructionMap.get("width"), (int) instructionMap.get("height"));
+                                }
+                                break;
+                            case BOX:
+                                graphics2D.setColor(new Color((int) instructionMap.get("r"), (int) instructionMap.get("g"), (int) instructionMap.get("b"), (int) instructionMap.get("a")));
+                                if ((boolean) instructionMap.get("filled")) {
+                                    graphics2D.fillRect((int) instructionMap.get("x"), (int) instructionMap.get("y"), (int) instructionMap.get("width"), (int) instructionMap.get("height"));
+                                } else {
+                                    graphics2D.drawRect((int) instructionMap.get("x"), (int) instructionMap.get("y"), (int) instructionMap.get("width"), (int) instructionMap.get("height"));
+                                }
+                                break;
+                            case LINE:
+                                graphics2D.setColor(new Color((int) instructionMap.get("r"), (int) instructionMap.get("g"), (int) instructionMap.get("b"), (int) instructionMap.get("a")));
+                                graphics2D.drawLine((int) instructionMap.get("x1"), (int) instructionMap.get("y1"), (int) instructionMap.get("x2"), (int) instructionMap.get("y2"));
+                                break;
+                            case PIXEL:
+                                graphics2D.setColor(new Color((int) instructionMap.get("r"), (int) instructionMap.get("g"), (int) instructionMap.get("b"), (int) instructionMap.get("a")));
+                                graphics2D.drawRect((int) instructionMap.get("x"), (int) instructionMap.get("y"), 1, 1);
+                                break;
+                            default:
+                        }
                     }
                 }
+                sgi.setInstructionList(listName, null);
             }
-            sgi.setInstructionList(null);
         }
     }
 
     public void draw() {
         Graphics graphics = (Graphics) this.getGraphics();
         graphics.drawImage(img, 0, 0, width, height, null);
+        sgi.setBufferedImage(img);
         graphics.dispose();
     }
 }

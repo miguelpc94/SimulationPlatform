@@ -2,20 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="97a704f7-930a-4194-93c1-812555755063" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/App/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/GraphicInstructions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/InstructionTypes.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/SimulationGraphicsInterface.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/SimulationPanel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/Window.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/AutomaticBrush.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/AutomaticPainting.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/UniversePaintingWorker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/WorkerStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/GUITest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/App/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/App/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/SimulationGraphicsInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/SimulationGraphicsInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/SimulationPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/SimulationPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/AutomaticBrush.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/AutomaticBrush.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/AutomaticPainting.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/AutomaticPainting.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/UniversePaintingWorker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/UniversePaintingWorker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/WorkerStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/WorkerStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/GUITest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/GUITest.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -100,6 +95,14 @@
       <option name="presentableId" value="Default" />
       <updated>1591466110766</updated>
     </task>
+    <task id="LOCAL-00001" summary="GUI testable and multi-thread automatic painting universe working">
+      <created>1592736539743</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1592736539743</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -114,6 +117,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="GUI testable and multi-thread automatic painting universe working" />
+    <option name="LAST_COMMIT_MESSAGE" value="GUI testable and multi-thread automatic painting universe working" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

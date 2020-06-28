@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 // TODO: Work on this universe <======== 6 (tail)
@@ -18,127 +22,172 @@ public class AutomaticPainting extends Thread {
     private Random rand;
     private int seed;
     private int smokeCounter;
-    private final int SMOKE_COUNTER_TRIGGER = 6;
+    private final int SMOKE_COUNTER_TRIGGER = 1;
 
-    private final int BRUSH_POPULATION  = 1200;
 
-    private final int NUMBER_OF_WORKERS = 5;
+
+    private final int BRUSH_POPULATION  = 20000;
+    private final int WORKERS = 2;
+
+
+    List<UniversePaintingWorker> workers;
+    List<WorkerStatus> workerStatus;
+
+    private String universeName;
 
     SimulationGraphicsInterface sgi;
 
-    final double UPDATE_HERTZ = 500;
+    final boolean LIMIT_UPS = false;
+    final double UPDATE_HERTZ = 50000;
     final double TBU = 1000000000/UPDATE_HERTZ; // Time Before Render
 
     List<List<AutomaticBrush>> automaticBrushes;
+
+    public void setUniverseName(String universeName) {
+        this.universeName = universeName;
+    }
+
+    public void setSeed(int seed) {
+        this.seed = seed;
+    }
 
     public void setSimulationGraphicsInterface(SimulationGraphicsInterface sgi) {
         this.sgi = sgi;
     }
 
-    private List<AutomaticBrush> populateAutomaticBrushes(int n) {
-        List<AutomaticBrush> newAutomaticBrushes = new ArrayList<>();
-        for (int i=0; i<n; i++) {
-            int width = sgi.getWidth();
-            int height = sgi.getHeight();
-            int brushX = (int)(rand.nextDouble()*width);
-            int brushY = (int)(rand.nextDouble()*height);
-            AutomaticBrush automaticBrush = new AutomaticBrush(brushX,brushY,rand,width,height);
-            newAutomaticBrushes.add(automaticBrush);
-        }
-        return newAutomaticBrushes;
-    }
 
-    List<UniversePaintingWorker> workers;
-    List<WorkerStatus> workerStatus;
 
     public void run() {
 
-        seed = 11;
+
         rand = new Random(seed);
         automaticBrushes = new ArrayList<>();
-        for (int i=0; i<NUMBER_OF_WORKERS; i++) automaticBrushes.add(populateAutomaticBrushes(BRUSH_POPULATION));
 
-        setName("universe-main");
+        int brushPopPerWorker = BRUSH_POPULATION/WORKERS;
+        workers = new ArrayList<>();
+        workerStatus = new ArrayList<>();
+        for (int i=0; i<WORKERS; i++) {
+            UniversePaintingWorker worker = new UniversePaintingWorker();
+            WorkerStatus status = new WorkerStatus();
+            worker.setStatus(status);
+            worker.setSeed(rand.nextInt());
+            worker.setWorkerName(universeName + " w" + i);
+            worker.setSimulationGraphicsInterface(sgi);;
+            worker.setPopulationSize(brushPopPerWorker);
+            worker.start();
+            workers.add(worker);
+            workerStatus.add(status);
+        }
+
+        setName(universeName+"main");
 
         running = true;
-        System.out.println("Universe running...");
+        System.out.println( universeName + " running...");
 
-        workerStatus = new ArrayList<>();
-        workers = new ArrayList<>();
-        for (int i=0; i<NUMBER_OF_WORKERS; i++) {
-            WorkerStatus status = new WorkerStatus();
-            UniversePaintingWorker worker = new UniversePaintingWorker();
-            worker.setStatus(status);
-            worker.start();
-            workerStatus.add(status);
-            workers.add(worker);
-        }
 
         double lastUpdateTime = System.nanoTime();
         double lastUPSReportTime = System.currentTimeMillis();
-        int updateCounter = 0;
+        double startTime = System.currentTimeMillis();
+        long updateCounter = 0;
+        long nextMinuteMark = 60000;
 
         while(running) {
             double now = System.nanoTime();
-            while ((now-lastUpdateTime) < TBU) {
-                long millisToSleep = (long)((TBU - (now-lastUpdateTime))/1000000);
-                if (millisToSleep>0) {
-                    try {
-                        yield();
-                        sleep(millisToSleep/2);
-                    } catch (Exception e) {
-                        System.out.println("Error yielding thread");
+            if (LIMIT_UPS) {
+                while ((now-lastUpdateTime) < TBU) {
+                    long millisToSleep = (long)((TBU - (now-lastUpdateTime))/1000000);
+                    if (millisToSleep>0) {
+                        try {
+                            yield();
+                            sleep(millisToSleep/2);
+                        } catch (Exception e) {
+                            System.out.println("Error yielding thread");
+                        }
                     }
+                    now = System.nanoTime();
                 }
-                now = System.nanoTime();
             }
-            lastUpdateTime = System.nanoTime();
-            update();
+            try {
+                update();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //lastUpdateTime = System.nanoTime();
             updateCounter++;
 
             double timeSinceLastUPSReport = System.currentTimeMillis() - lastUPSReportTime;
             if (timeSinceLastUPSReport >= 5000) {
-                double ups = updateCounter / (timeSinceLastUPSReport/1000);
+                double ups = updateCounter / ((System.currentTimeMillis()-startTime)/1000);
                 System.out.println(ups);
-                updateCounter = 0;
+                if ((System.currentTimeMillis()-startTime)>=nextMinuteMark) {
+                    System.out.println((nextMinuteMark/60000)+" minute mark / Counter: "+updateCounter);
+                    nextMinuteMark += 60000;
+                }
+                //updateCounter = 0;
                 lastUPSReportTime = System.currentTimeMillis();
             }
 
         }
     }
 
-
-
-
     // This is where the universe update loop happens
-    private void update() {
+    private void update() throws ExecutionException, InterruptedException {
 
         List<GraphicInstructions> instructionList = new LinkedList<>();
         GraphicInstructions environmentInstructions = new GraphicInstructions();
 
         smokeCounter++;
         if (smokeCounter>SMOKE_COUNTER_TRIGGER) {
-            environmentInstructions.addBox(0,0, sgi.getWidth(), sgi.getHeight(),10,255,255,255,true);
+            environmentInstructions.addBox(0,0, sgi.getWidth(), sgi.getHeight(),10,0,0,0,true);
             smokeCounter = 0;
         }
 
         instructionList.add(environmentInstructions);
+        sgi.setInstructionList(universeName, instructionList);
 
-        for (int i=0; i<NUMBER_OF_WORKERS; i++) {
-            workerStatus.get(i).work(automaticBrushes.get(i));
+        for (int i=0; i< WORKERS; i++) {
+            workerStatus.get(i).work();
         }
 
-        int workersBusy = NUMBER_OF_WORKERS;
-        while(workersBusy > 0) {
-            workersBusy = NUMBER_OF_WORKERS;
+        boolean workersBusy = true;
+        while(workersBusy) {
+            workersBusy = false;
             for (WorkerStatus status : workerStatus) {
-                if (status.isDone()) workersBusy--;
+                workersBusy = !status.isDone();
             }
-        };
+        }
 
-        for (int i=0; i<NUMBER_OF_WORKERS; i++) instructionList.add(workerStatus.get(i).getInstructions());
+        //System.out.println("Workers done");
 
-        sgi.setInstructionList(instructionList);
+
+        /*
+        List<Future<GraphicInstructions>> futureGraphicInstructions = new LinkedList<>();
+        for (List<AutomaticBrush> popSeg : automaticBrushes) {
+            futureGraphicInstructions.add(executorService.submit(() -> {
+                final List<AutomaticBrush> population = popSeg;
+                GraphicInstructions instructions = new GraphicInstructions();
+                for (AutomaticBrush automaticBrush : population) {
+                    automaticBrush.draw(instructions);
+                }
+                return instructions;
+            }));
+        }
+
+        while(futureGraphicInstructions.size()>0) {
+            for (int i = 0; i<futureGraphicInstructions.size(); i++) {
+                Future<GraphicInstructions> futureGraphicInstruction = futureGraphicInstructions.get(i);
+                if (futureGraphicInstruction.isDone()) {
+                    instructionList.add(futureGraphicInstruction.get());
+                    futureGraphicInstructions.remove(i);
+                    i--;
+                }
+            }
+        }
+        */
+
+
     }
 
     public void setRunning(boolean running) {
