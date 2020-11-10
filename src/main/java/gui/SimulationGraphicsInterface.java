@@ -12,27 +12,26 @@ public class SimulationGraphicsInterface {
     private int height;
 
     private volatile BufferedImage bufferedImage;
-
     private volatile Map<String,List<GraphicInstructions>> instructionList;
-    private Map<String,Integer> userInput;
+    private volatile KeyHandler keyHandler;
+
 
     public SimulationGraphicsInterface(int width, int height) {
         this.width = width;
         this.height = height;
         instructionList = new HashMap<>();
-        userInput = new HashMap<>();
+    }
+
+    public void setKeyHandler(KeyHandler keyHandler) {
+        this.keyHandler = keyHandler;
     }
 
     public void setBufferedImage(BufferedImage bufferedImage) { this.bufferedImage = bufferedImage; }
 
     public BufferedImage getBufferedImage() { return bufferedImage; }
 
-    public void setUserInput(Map<String,Integer> newUserInput) {
-        userInput = newUserInput;
-    }
-
-    public Map<String,Integer> getUserInput() {
-        return userInput;
+    public boolean isKeyCharPressed(char key) {
+        return keyHandler != null && keyHandler.isKeyCharPressed(key);
     }
 
     public void setInstructionList(String listName,List<GraphicInstructions> newInstructions) {

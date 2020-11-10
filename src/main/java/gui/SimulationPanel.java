@@ -21,6 +21,7 @@ public class SimulationPanel extends JPanel implements Runnable {
     private Thread thread;
     private boolean running = false;
     private SimulationGraphicsInterface sgi;
+    private KeyHandler keyHandler;
 
     final double RENDER_HERTZ =500;
     final double TBR = 1000000000/RENDER_HERTZ; // Time Before Render
@@ -28,7 +29,6 @@ public class SimulationPanel extends JPanel implements Runnable {
     private BufferedImage img;
     private Graphics2D graphics2D;
 
-    // A state needs to be passed to this Panel, so it can update the drawing in the update part of the cycle
     public SimulationPanel(SimulationGraphicsInterface sgi) {
         this.width = sgi.getWidth();
         this.height = sgi.getHeight();
@@ -37,6 +37,8 @@ public class SimulationPanel extends JPanel implements Runnable {
         setFocusable(true);
         requestFocus();
         this.rand = new Random(12);
+        this.keyHandler = new KeyHandler(this);
+        sgi.setKeyHandler(this.keyHandler);
     }
 
     public void addNotify() {

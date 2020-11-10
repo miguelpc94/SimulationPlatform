@@ -22,7 +22,7 @@ public class AutomaticBrush {
     private double ySpeed = 0;
     private double maxSpeed = 0.05;
 
-    private int size = 4;
+    private int size = 3;
 
     private double atenuatorOffset;
     private double maxSpeedOffset;

@@ -2,15 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="97a704f7-930a-4194-93c1-812555755063" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/App/Experiment40x16HeatMap.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/gui/KeyHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/ExperimentInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/App/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/App/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/SimulationGraphicsInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/SimulationGraphicsInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/SimulationPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/SimulationPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/AutomaticBrush.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/AutomaticBrush.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/AutomaticPainting.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/AutomaticPainting.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/UniversePaintingWorker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/UniversePaintingWorker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/WorkerStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/universes/automaticpainting/WorkerStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/GUITest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/GUITest.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -33,6 +33,7 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -51,6 +52,19 @@
     </option>
   </component>
   <component name="RunManager" selected="Application.Main">
+    <configuration name="Experiment40x16HeatMap" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="App.Experiment40x16HeatMap" />
+      <module name="SimulationPlatform" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="App.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="App.Main" />
       <module name="SimulationPlatform" />
@@ -80,6 +94,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Experiment40x16HeatMap" />
         <item itemvalue="Application.Test" />
       </list>
     </recent_temporary>
